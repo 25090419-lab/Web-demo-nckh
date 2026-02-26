@@ -156,12 +156,13 @@ function generateEducationPrompt(type) {
         const item1 = document.getElementById('edu-compare-item1').value;
         const item2 = document.getElementById('edu-compare-item2').value;
         const criteria = document.getElementById('edu-compare-criteria').value;
-        const details = document.getElementById('edu-compare-details').value;
+        const advantages = document.getElementById('edu-compare-advantages').value;
+        const weaknesses = document.getElementById('edu-compare-weaknesses').value;
         const conclusion = document.getElementById('edu-compare-conclusion').value;
         const emotion = document.getElementById('edu-compare-emotion').value;
         const layout = document.getElementById('edu-compare-layout').value;
         const color = document.getElementById('edu-compare-color').value;
-        specificData = { item1, item2, criteria, details, conclusion , emotion, layout, color };
+        specificData = { item1, item2, criteria, advantages, weaknesses, conclusion , emotion, layout, color };
     } else if (type === 'summary') {
         const dataType = document.getElementById('edu-summary-type').value;
         const data = document.getElementById('edu-summary-data').value;
@@ -172,17 +173,17 @@ function generateEducationPrompt(type) {
         const conclusion = document.getElementById('edu-summary-conclusion').value;
         const layout = document.getElementById('edu-summary-layout').value;
         const color = document.getElementById('edu-summary-color').value;
-        specificData = { dataType, data, categories, insights, source, event, conclusion, layout, color };
+        const emotion = document.getElementById('edu-summary-emotion').value;
+        const icon = document.getElementById('edu-summary-icons').value;
+        specificData = { dataType, data, categories, insights, source, event, conclusion, layout, color, emotion, icon };
     }
     console.log(specificData);
     const typeTemplates = {
         timeline: `Tạo infographic timeline với các yêu cầu sau:
 ⏰ THÔNG TIN TIMELINE:
 - Khoảng thời gian: ${specificData.period || 'Chưa xác định'}
-- Các mốc quan trọng:
-${specificData.milestones || 'Chưa có thông tin chi tiết'}
-- Mối liên hệ giữa các mốc:
-${specificData.event || 'Chưa có mối liên hệ cụ thể'}
+- Các mốc quan trọng:${specificData.milestones || 'Chưa có thông tin chi tiết'}
+- Mối liên hệ giữa các mốc:${specificData.event || 'Chưa có mối liên hệ cụ thể'}
 - Kết luận tổng quan: ${specificData.conclusion || 'Chưa có kết luận'}
 -Đối tượng khán giả : ${specificData.audience || 'Chưa xác định'}
 🎯 MỤC TIÊU: ${specificData.target || 'Chưa xác định'}
@@ -195,8 +196,7 @@ ${specificData.event || 'Chưa có mối liên hệ cụ thể'}
 - Sử dụng icon và biểu tượng phù hợp cho từng mốc thời gian
 - Thông tin được sắp xếp theo thứ tự thời gian logic
 - Highlight các mốc quan trọng với màu sắc nổi bật
-- Đường timeline rõ ràng, có điểm đánh dấu
-- Tông màu ${specificData.color || 'chuyên nghiệp và dễ nhìn'}
+- Đường timeline rõ ràng, có điểm đánh dấu cho từng sự kiện
 
 📐 ĐỊNH DẠNG: Infographic dọc, tỷ lệ 3:4, độ phân giải cao, phù hợp chia sẻ mạng xã hội`,
 
@@ -204,14 +204,14 @@ ${specificData.event || 'Chưa có mối liên hệ cụ thể'}
 ⚖️ THÔNG TIN SO SÁNH:
 - Đối tượng 1: ${specificData.item1 || 'Chưa xác định'}
 - Đối tượng 2: ${specificData.item2 || 'Chưa xác định'}
-- Tiêu chí so sánh:
-${specificData.criteria || 'Chưa có tiêu chí cụ thể'}
-- Chi tiết ưu/nhược điểm:
-${specificData.details || 'Chưa có thông tin chi tiết'}
+- Tiêu chí so sánh:${specificData.criteria || 'Chưa có tiêu chí cụ thể'}
+- Chi tiết ưu điểm: ${specificData.advantages || 'Chưa có thông tin chi tiết'}
+- Chi tiết nhược điểm: ${specificData.weaknesses || 'Chưa có thông tin chi tiết'}
 - Kết luận: ${specificData.conclusion || 'Chưa có kết luận'}
 
 📋 YÊU CẦU THIẾT KẾ:
-- Bố cục đối xứng, cân bằng giữa hai bên so sánh
+- Bố cục đối xứng, cân bằng giữa hai bên so sánh ${specificData.layout || 'Chưa xác định'}
+- Màu sắc chủ đạo: ${specificData.color || 'Chưa xác định'}
 - Sử dụng bảng, biểu đồ để làm rõ sự khác biệt
 - Highlight ưu/nhược điểm rõ ràng với màu xanh/đỏ
 - Icon và màu sắc phân biệt rõ ràng giữa hai nhóm
@@ -222,14 +222,19 @@ ${specificData.details || 'Chưa có thông tin chi tiết'}
         summary: `Tạo infographic tổng hợp với các yêu cầu sau:
 
 📊 THÔNG TIN TỔNG HỢP:
-- Loại dữ liệu: ${specificData.dataType || 'Chưa xác định'}
-- Số liệu chính:
-${specificData.data || 'Chưa có số liệu cụ thể'}
+- Nội dung cần hiển thị: ${specificData.dataType || 'Chưa xác định'}
+- Số liệu chính:${specificData.data || 'Chưa có số liệu cụ thể'}
 - Phân loại dữ liệu: ${specificData.categories || 'Chưa phân loại'}
 - Insight quan trọng: ${specificData.insights || 'Chưa có phân tích'}
-- Nguồn: ${specificData.source || 'Chưa xác định nguồn'}
-
+- Nguồn dữ liệu: ${specificData.source || 'Chưa xác định nguồn'}
+- Mối liên hệ giữa các dữ liệu: ${specificData.event || 'Chưa có mối liên hệ cụ thể'}
+- Kết luận thông điệp: ${specificData.conclusion || 'Chưa có kết luận'}
 📋 YÊU CẦU THIẾT KẾ:
+- Bố cục rõ ràng, dễ theo dõi với phần header, body, footer
+- Bố cục ${specificData.layout || 'phù hợp với nội dung'} để làm nổi bật thông tin chính
+- Sử dụng màu sắc chủ đạo: ${specificData.color || 'Chưa xác định'}
+- Phong cách biểu tượng: ${specificData.icon || 'Chưa xác định'}
+- Giọng điệu ${specificData.emotion || 'trung lập và chuyên nghiệp'}
 - Sử dụng biểu đồ phù hợp: cột, tròn, đường, donut chart
 - Thông tin được nhóm theo chủ đề logic với headers rõ ràng
 - Highlight số liệu quan trọng với font size lớn và màu nổi bật
@@ -302,27 +307,37 @@ function generateCommunicationPrompt(type) {
         const item2 = document.getElementById('comm-compare-item2').value;
         const scale = document.getElementById('comm-compare-scale').value;
         const criteria = document.getElementById('comm-compare-criteria').value;
-        const details = document.getElementById('comm-compare-detail').value;
+        const advantages = document.getElementById('comm-compare-advantages').value;
+        const weaknesses = document.getElementById('comm-compare-weaknesses').value;
         const different = document.getElementById('comm-compare-difference').value;
         const conclusion = document.getElementById('comm-compare-conclusion').value;
         const emotion = document.getElementById('comm-compare-emotion').value;
         const layout = document.getElementById('comm-compare-layout').value;
         const color = document.getElementById('comm-compare-color').value;
-        specificData = { item1, item2, criteria, details, conclusion , emotion, layout, color, scale, different };
+        const icon = document.getElementById('comm-compare-icon').value;
+        specificData = { item1, item2, criteria, advantages, weaknesses, conclusion , emotion, layout, color, scale, different, icon };
     }
     console.log(specificData);
     const typeTemplates = {
         news: `Tạo infographic tin tức với các yêu cầu sau:
 📰 THÔNG TIN TIN TỨC:
+- Đối tượng khán giả: ${specificData.audience || 'Chưa xác định'}
+- Bối cảnh sự kiện: ${specificData.context || 'Chưa có bối cảnh cụ thể'}
 - Tiêu đề chính: ${specificData.headline || 'Chưa có tiêu đề'}
-- Nội dung: ${specificData.content || 'Chưa có nội dung chi tiết'}
+- Nội dung tin tức: ${specificData.content || 'Chưa có nội dung chi tiết'}
+- Số liệu đáng chú ý: ${specificData.data || 'Chưa có số liệu cụ thể'}
 - Thời gian: ${specificData.date || 'Chưa xác định'}
-- Tác động/Ý nghĩa: ${specificData.impact || 'Chưa có thông tin'}
+- Ý tưởng chính: ${specificData.mainideas || 'Chưa có ý tưởng chính'}
+- Nhân vật liên quan: ${specificData.character || 'Chưa có thông tin nhân vật'}
 - Liên hệ: ${specificData.contact || 'Chưa có thông tin liên hệ'}
-
+- Kết luận: ${specificData.conclusion || 'Chưa có kết luận'}
+- Kêu gọi hành động ${specificData.action || 'Chưa có kêu gọi hành động cụ thể'}
 📋 YÊU CẦU THIẾT KẾ:
-- Tiêu đề "${specificData.headline} || " nổi bật, font size lớn
-- Layout tin tức với header, body, footer rõ ràng
+- Tiêu đề "${specificData.headline || 'Tiêu đề nổi bật, font size lớn và màu sắc thu hút'}"
+- Layout tin tức với header, body, footer rõ ràng ${specificData.layout || 'phù hợp với nội dung'}
+- Màu sắc chủ đạo: ${specificData.color || 'Chưa xác định'}
+- Phong cách biểu tượng: ${specificData.icon || 'Chưa xác định'}
+- Giọng điệu ${specificData.emotion || 'trung lập và chuyên nghiệp'}
 - Sử dụng icon tin tức, breaking news elements
 - Highlight thông tin quan trọng (thời gian, tác động)
 - CTA button nổi bật với màu sắc thu hút
@@ -333,19 +348,20 @@ function generateCommunicationPrompt(type) {
 
 📅 THÔNG TIN TIMELINE:
 - Thời gian tổng thể: ${specificData.duration || 'Chưa xác định'}
-- Lịch trình chi tiết:
-${specificData.schedule || 'Chưa có lịch trình cụ thể'}
+- Lịch trình chi tiết:${specificData.schedule || 'Chưa có lịch trình cụ thể'}
 - Địa điểm: ${specificData.venue || 'Chưa xác định'}
 - Diễn giả/Khách mời: ${specificData.speakers || 'Chưa có thông tin'}
 - Hoạt động đặc biệt: ${specificData.activities || 'Chưa có thông tin'}
-
+- Kết luận thông điệp: ${specificData.conclusion || 'Chưa có kết luận'}
 📋 YÊU CẦU THIẾT KẾ:
 - Timeline dọc hoặc ngang với thời gian cụ thể
-- Các hoạt động được sắp xếp theo thứ tự thời gian
+- Các hoạt động được sắp xếp theo thứ tự thời gian rõ ràng ${specificData.layout || 'phù hợp với nội dung'}
 - Icon và màu sắc phân biệt từng phần/ngày
 - Highlight diễn giả và hoạt động đặc biệt
 - Thông tin địa điểm và đăng ký rõ ràng
-- Phong cách ${specificData.layout || 'hiện đại và năng động'}
+- Giọng điệu ${specificData.emotion || 'năng động và chuyên nghiệp'}
+- Mau sắc chủ đạo: ${specificData.color || 'Chưa xác định'}
+- Phong cách biểu tượng: ${specificData.icon || 'Chưa xác định'}
 - Thu hút và phù hợp 
 
 📐 ĐỊNH DẠNG: Infographic dọc, timeline layout, tỷ lệ 3:4, độ phân giải cao`,
@@ -353,14 +369,18 @@ ${specificData.schedule || 'Chưa có lịch trình cụ thể'}
         profile: `Tạo infographic profile với các yêu cầu sau:
 
 👤 THÔNG TIN PROFILE:
-- Tên: ${specificData.name || 'Chưa xác định'}
+- Tên cá nhân/ tên tổ chức: ${specificData.name || 'Chưa xác định'}
+- Ngày sinh/ thành lập: ${specificData.date || 'Chưa xác định'}
 - Chức vụ/Vai trò: ${specificData.position || 'Chưa xác định'}
-- Thành tích nổi bật:
-${specificData.achievements || 'Chưa có thông tin thành tích'}
+- Thành tích nổi bật:${specificData.achievements || 'Chưa có thông tin thành tích'}
 - Kinh nghiệm/Lĩnh vực: ${specificData.experience || 'Chưa có thông tin'}
-- Liên hệ: ${specificData.contact || 'Chưa có thông tin liên hệ'}
+- Thông tin liên hệ: ${specificData.contact || 'Chưa có thông tin liên hệ'}
 - Quote: ${specificData.quote || 'Không có'}
+- Kết luận thông điệp: ${specificData.conclusion || 'Chưa có kết luận'}
 📋 YÊU CẦU THIẾT KẾ:
+-Giọng điệu ${specificData.emotion || 'chuyên nghiệp và thân thiện'}
+- Màu sắc chủ đạo: ${specificData.color || 'Chưa xác định'}
+- Phong cách biểu tượng: ${specificData.icon || 'Chưa xác định'}
 - Layout profile card với avatar/photo placeholder
 - Thông tin được nhóm theo sections: About, Achievements, Experience
 - Highlight thành tích nổi bật với icons và số liệu
@@ -368,27 +388,29 @@ ${specificData.achievements || 'Chưa có thông tin thành tích'}
 - Thông tin liên hệ (social media icons) dễ thấy
 - Professional headshot area hoặc company logo space
 - Phong cách ${specificData.layout || 'chuyên nghiệp và uy tín'}
-- Tạo ấn tượng tốt với ${specificData.audience}
 
-📐 ĐỊNH DẠNG: Infographic dọc hoặc vuông, layout card-based, tỷ lệ phù hợp với profile`
-    };
+📐 ĐỊNH DẠNG: Infographic dọc hoặc vuông, layout card-based, tỷ lệ phù hợp với profile`,
          comparison: `Tạo infographic so sánh với các yêu cầu sau:
 ⚖️ THÔNG TIN SO SÁNH:
 - Đối tượng 1: ${specificData.item1 || 'Chưa xác định'}
 - Đối tượng 2: ${specificData.item2 || 'Chưa xác định'}
-- Tiêu chí so sánh:
-${specificData.criteria || 'Chưa có tiêu chí cụ thể'}
-- Chi tiết ưu/nhược
-${specificData.details || 'Chưa có thông tin chi tiết'}
+- Quy mô tham dự ${specificData.scale || 'Chưa xác định'}
+- Tiêu chí so sánh:${specificData.criteria || 'Chưa có tiêu chí cụ thể'}
+- Chi tiết ưu điểm: ${specificData.advantages || 'Chưa có thông tin chi tiết'}
+- Chi tiết nhược điểm: ${specificData.weaknesses || 'Chưa có thông tin chi tiết'}
+- Điểm khác biệt nổi bật: ${specificData.different || 'Chưa có điểm khác biệt cụ thể'}  
 - Kết luận: ${specificData.conclusion || 'Chưa có kết luận'}
 📋 YÊU CẦU THIẾT KẾ
-- Bố cục đối xứng, cân bằng giữa hai bên so sánh
+- Bố cục đối xứng, cân bằng giữa hai bên so sánh ${specificData.layout || 'Chưa xác định'}
+- Màu sắc chủ đạo: ${specificData.color || 'Chưa xác định'}
+- Biểu tượng minh họa: ${specificData.icon || 'Chưa xác định'}
+- Giong điệu ${specificData.emotion || 'trung lập và chuyên nghiệp'}
 - Sử dụng bảng, biểu đồ để làm rõ sự khác biệt
 - Highlight ưu/nhược điểm rõ ràng với màu xanh/đỏ
 - Icon và màu sắc phân biệt rõ ràng giữa hai nhóm
 - Phần kết luận nổi bật ở cuối
 📐 ĐỊNH DẠNG: Infographic ngang hoặc dọc, bố cục split-screen, độ phân giải cao
-`
+`};
     return typeTemplates[type];
 }
 
